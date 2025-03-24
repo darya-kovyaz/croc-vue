@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "title": "Купить продукты",
+    "description": "Молоко, хлеб, сыр, овощи",
+    "deadline": "2025-03-20T18:00:00Z",
+    "priority": "Средний",
+    "completed": false,
+    "category": "Дом",
+    "tags": ["покупки", "еда"]
+  },
+  {
+    "id": 2,
+    "title": "Закончить презентацию",
+    "description": "Слайды по проекту для встречи в пятницу",
+    "deadline": "2025-03-19T12:00:00Z",
+    "priority": "Высокий",
+    "completed": false,
+    "category": "Работа",
+    "tags": ["важное", "дедлайн"]
+  },
+  {
+    "id": 3,
+    "title": "Почитать книгу",
+    "description": "",
+    "deadline": "2025-03-25T21:00:00Z",
+    "priority": "Низкий",
+    "completed": true,
+    "category": "Личное",
+    "tags": ["отдых"]
+  },
+  {
+    "id": 4,
+    "title": "Сходить в спортзал",
+    "description": "Тренировка на спину и плечи",
+    "deadline": "2025-03-18T17:00:00Z",
+    "priority": "Средний",
+    "completed": false,
+    "category": "Здоровье",
+    "tags": ["спорт", "здоровье"]
+  },
+  {
+    "id": 5,
+    "title": "Созвон с клиентом",
+    "description": "Обсудить финальные правки по дизайну",
+    "deadline": "2025-03-18T15:00:00Z",
+    "priority": "Высокий",
+    "completed": true,
+    "category": "Работа",
+    "tags": ["встреча", "клиент"]
+  }
+]

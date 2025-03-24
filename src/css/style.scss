@@ -1,0 +1,174 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.main {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  padding: 20px;
+}
+
+.task {
+  width: 100%;
+
+  &__caption {
+    font-style: normal;
+    font-size: 30px;
+    text-align: center;
+    padding-left: 30px;
+  }
+
+  &__title {
+    font-style: normal;
+    font-size: 20px;
+  }
+
+  &__subTitle {
+    font-style: normal;
+    font-size: 1rem;
+  }
+
+  &__sort {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 30px;
+
+    &__sort-component {
+      width: 400px;
+    }
+  }
+
+  &__list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 20px;
+
+    &__component {
+      max-height: calc(100vh - 237px);
+      overflow-y: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-direction: column;
+      padding: 0 20px 20px 20px;
+    }
+
+    &__item-component {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-left: 30px;
+
+      &__icons {
+        display: flex;
+        position: absolute;
+        gap: 10px;
+        left: -20px;
+      }
+    }
+
+    &__button {
+      display: flex;
+      justify-content: center;
+      padding-left: 30px;
+    }
+
+    &__empty {
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+      padding-left: 30px;
+    }
+  }
+
+  &__addButton {
+    width: 400px;
+    margin-bottom: 10px;
+  }
+
+  &__item {
+    width: 400px;
+    margin: 5px;
+    border-radius: 8px;
+    border: 1px solid var(--border-light-grey, #D6DADE);
+    padding: 5px 17px 15px 17px;
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+
+      &--icons {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+
+    &__body {
+
+      &__tags {
+        padding-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      &__tag {
+        padding: 2px 9px;
+        border-radius: 16px;
+        background-color: #e0e0e0;
+        font-size: 0.9rem;
+      }
+
+      &--deadline {
+        padding-top: 5px;
+
+        &--deadlineAndCategory {
+          display: flex;
+          align-items: center;
+
+          &--category {
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: #525252;
+          }
+        }
+
+        &--text {
+          font-weight: 500;
+          font-size: 0.8rem;
+          color: #525252;
+        }
+
+        &--text.overdue {
+          font-style: italic;
+          font-weight: 500;
+          font-size: 0.8rem;
+          color: #d70015;
+        }
+      }
+    }
+  }
+}
+
+.modal {
+  padding: 20px;
+
+  &__wrapped-forms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
