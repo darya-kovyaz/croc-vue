@@ -9,6 +9,24 @@ const actions: ActionTree<IState, IState> = {
       commit("setTasks", JSON.parse(tasks));
     }
   },
+
+  applyFilters({ state }) {
+    state.filteredTasks = state.tasks.filter((task) => {
+      const matchesStatus =
+        state.filtersApplied.completed.length === 0 ||
+        state.filtersApplied.completed.includes(task.completed);
+
+      const matchesCategory =
+        state.filtersApplied.category.length === 0 ||
+        state.filtersApplied.category.includes(task.category);
+
+      const matchesPriority =
+        state.filtersApplied.priority.length === 0 ||
+        state.filtersApplied.priority.includes(task.priority);
+
+      return matchesStatus && matchesCategory && matchesPriority;
+    });
+  },
 };
 
 export default actions;

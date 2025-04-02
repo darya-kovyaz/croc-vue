@@ -7,9 +7,9 @@ export enum ECategory {
 }
 
 export enum EPriority {
-  LOW = "Низкий",
-  MEDIUM = "Средний",
   HIGH = "Высокий",
+  MEDIUM = "Средний",
+  LOW = "Низкий",
 }
 
 export interface ITask {
@@ -23,13 +23,27 @@ export interface ITask {
   tags: string[];
 }
 
+export interface IFilter {
+  priority: string[];
+  category: string[];
+  completed: boolean[];
+}
+
 export interface IState {
   tasks: ITask[];
+  filteredTasks: ITask[];
+  filtersApplied: IFilter;
 }
 
 function state(): IState {
   return {
     tasks: [],
+    filteredTasks: [],
+    filtersApplied: {
+      priority: [],
+      category: [],
+      completed: [],
+    },
   };
 }
 

@@ -1,65 +1,83 @@
 <template>
-  <div class="task__list">
-    <div>
-      <div class="task__list__button">
-        <v-btn class="task__addButton" @click="onOpenAddModal">
-          Добавить задачу
-        </v-btn>
-      </div>
-      <div class="task__sort">
-        <div class="task__sort__sort-component">
-          <Sort :tasks="tasks" @sort="onSort" />
+  <div>
+    <v-skeleton-loader v-if="isLoading" />
+    <div v-else class="task__list">
+      <div>
+        <div class="task__list__button">
+          <v-btn class="task__addButton" @click="onOpenAddModal">
+            Добавить задачу
+          </v-btn>
+        </div>
+        <div class="task__sort">
+          <div class="task__sort__sort-component">
+            <Sort :tasks="tasks" @sort="onSort" />
+          </div>
+          <div class="task__sort__filter-component">
+            <FilterComponent :filtered-tasks="tasks" />
+          </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="!tasks.length" class="task__list__empty">
-      Нет задач
-      <v-icon color="red" size="medium">fa-solid fa-heart-crack</v-icon>
-    </div>
-
-    <div v-else class="task__list__component">
-      <div v-for="(task, idx) in filteredTasks" :key="task.id">
-        <Task
-          :task="task"
-          :idx="idx"
-          @edit="onOpenEditModal"
-          @delete="onDelete"
-        />
+      <div v-if="!tasks.length" class="task__list__empty">
+        Нет задач
+        <v-icon color="red" size="medium">fa-solid fa-heart-crack</v-icon>
       </div>
+
+      <div v-else class="task__list__component">
+        <RecycleScroller
+          :key="filteredTasks.length"
+          :items="filteredTasks"
+          :item-size="20"
+          key-field="id"
+        >
+          <template #default="{ item: task, index: idx }">
+            <Task
+              :task="task"
+              :idx="idx"
+              @edit="onOpenEditModal"
+              @delete="onDelete"
+            />
+          </template>
+        </RecycleScroller>
+      </div>
+      <ModalForm
+        v-if="isOpen"
+        :is-edit="isEdit"
+        :is-open="isOpen"
+        :data="selectedTask"
+        @add="onAdd"
+        @update="onUpdate"
+        @close="onCloseModal"
+      />
     </div>
-    <ModalForm
-      v-if="isOpen"
-      :is-edit="isEdit"
-      :is-open="isOpen"
-      :data="selectedTask"
-      @add="onAdd"
-      @update="onUpdate"
-      @close="onCloseModal"
-    />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { Action, Mutation, State } from "vuex-class";
-
 import Component from "vue-class-component";
+
 import { ITask } from "../store/state";
+
+import { RecycleScroller } from "vue-virtual-scroller";
 
 import Task from "./Task.vue";
 import ModalForm from "./ModalForm.vue";
 import Sort from "../components/Sort.vue";
+import FilterComponent from "../components/FilterComponent.vue";
 
 @Component({
   components: {
+    Task,
     Sort,
     ModalForm,
-    Task,
+    FilterComponent,
+    RecycleScroller,
   },
 })
 export default class Tasks extends Vue {
-  @State("tasks")
+  @State("filteredTasks")
   tasks!: ITask[];
 
   @Mutation("setTasks")
@@ -85,6 +103,8 @@ export default class Tasks extends Vue {
 
   selectedTask: ITask | null = null;
 
+  isLoading = false;
+
   get filteredTasks() {
     return [...this.tasks].sort((a, b) => {
       if (a.completed !== b.completed) {
@@ -96,8 +116,11 @@ export default class Tasks extends Vue {
   }
 
   mounted() {
+    this.isLoading = true;
     // this.clearTasks();
     this.getTasks();
+
+    this.isLoading = false;
   }
 
   onAdd(task: ITask) {
