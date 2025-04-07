@@ -106,13 +106,9 @@ export default class Tasks extends Vue {
   isLoading = false;
 
   get filteredTasks() {
-    return [...this.tasks].sort((a, b) => {
-      if (a.completed !== b.completed) {
-        return Number(a.completed) - Number(b.completed);
-      }
-
-      return 0;
-    });
+    return [...this.tasks].sort(
+      (a, b) => Number(a.completed) - Number(b.completed)
+    );
   }
 
   mounted() {
