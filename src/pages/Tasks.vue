@@ -13,32 +13,26 @@
             <Sort :tasks="tasks" @sort="onSort" />
           </div>
           <div class="task__sort__filter-component">
-            <FilterComponent :filtered-tasks="tasks" />
+            <FilterComponent />
           </div>
         </div>
       </div>
 
       <div v-if="!tasks.length" class="task__list__empty">
         Нет задач
-        <v-icon color="red" size="medium">fa-solid fa-heart-crack</v-icon>
+        <v-icon color="red" size="medium" v-text="'fa-solid fa-heart-crack'" />
       </div>
 
       <div v-else class="task__list__component">
-        <RecycleScroller
-          :key="filteredTasks.length"
-          :items="filteredTasks"
-          :item-size="20"
-          key-field="id"
-        >
-          <template #default="{ item: task, index: idx }">
-            <Task
-              :task="task"
-              :idx="idx"
-              @edit="onOpenEditModal"
-              @delete="onDelete"
-            />
-          </template>
-        </RecycleScroller>
+        <template v-for="(task, idx) in filteredTasks">
+          <Task
+            :task="task"
+            :key="task.id"
+            :idx="idx"
+            @edit="onOpenEditModal"
+            @delete="onDelete"
+          />
+        </template>
       </div>
       <ModalForm
         v-if="isOpen"
@@ -60,8 +54,6 @@ import Component from "vue-class-component";
 
 import { ITask } from "../store/state";
 
-import { RecycleScroller } from "vue-virtual-scroller";
-
 import Task from "./Task.vue";
 import ModalForm from "./ModalForm.vue";
 import Sort from "../components/Sort.vue";
@@ -73,12 +65,14 @@ import FilterComponent from "../components/FilterComponent.vue";
     Sort,
     ModalForm,
     FilterComponent,
-    RecycleScroller,
   },
 })
 export default class Tasks extends Vue {
   @State("filteredTasks")
   tasks!: ITask[];
+
+  @State("tasks")
+  rrr!: ITask[];
 
   @Mutation("setTasks")
   setTasks!: (tasks: ITask[]) => void;
@@ -106,9 +100,7 @@ export default class Tasks extends Vue {
   isLoading = false;
 
   get filteredTasks() {
-    return [...this.tasks].sort(
-      (a, b) => Number(a.completed) - Number(b.completed)
-    );
+    return this.tasks.sort((a, b) => Number(a.completed) - Number(b.completed));
   }
 
   mounted() {

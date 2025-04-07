@@ -6,31 +6,41 @@
   >
     <div class="task__list__item-component__icons">
       <div>
-        <v-icon v-show="hoverIdx === idx" size="medium" @click="onEdit">
-          fa-solid fa-pen
-        </v-icon>
+        <v-icon
+          v-show="hoverIdx === idx"
+          size="medium"
+          v-text="'fa-solid fa-pen'"
+          @click="onEdit"
+        />
       </div>
       <div>
-        <v-icon v-show="hoverIdx === idx" size="medium" @click="onDelete">
-          fa-solid fa-trash
-        </v-icon>
+        <v-icon
+          v-show="hoverIdx === idx"
+          size="medium"
+          v-text="'fa-solid fa-trash'"
+          @click="onDelete"
+        />
       </div>
     </div>
 
-    <div class="task__item">
+    <div class="task__item" :class="{ completed: task.completed }">
       <div class="task__item__header">
         <v-checkbox
           v-model="task.completed"
           :label="task.title"
           class="task__title"
+          :class="{ completed: task.completed }"
+          color="black"
         />
         <div class="task__item__header--icons">
-          <v-icon :color="getIcon(task.priority)" size="medium">
-            fa-circle-exclamation
-          </v-icon>
+          <v-icon
+            :color="!task.completed ? getIcon(task.priority) : 'gray'"
+            size="medium"
+            v-text="'fa-circle-exclamation'"
+          />
         </div>
       </div>
-      <div class="task__subTitle">
+      <div class="task__subTitle" :class="{ completed: task.completed }">
         {{ task.description }}
       </div>
       <div v-if="task.tags.length" class="task__item__body__tags">
@@ -39,7 +49,10 @@
         </div>
       </div>
       <div class="task__item__body--deadline">
-        <div class="task__item__body--deadline--deadlineAndCategory">
+        <div
+          class="task__item__body--deadline--deadlineAndCategory"
+          :class="{ completed: task.completed }"
+        >
           <div
             class="task__item__body--deadline--deadlineAndCategory--category"
           >
@@ -61,7 +74,7 @@
 import Vue from "vue";
 import { Prop } from "vue-property-decorator";
 
-import { formatDistanceToNow, isPast } from "date-fns";
+import { formatDistanceToNow, isPast, format } from "date-fns";
 import { ru } from "date-fns/locale";
 
 import Component from "vue-class-component";
@@ -92,11 +105,17 @@ export default class Tasks extends Vue {
   get formattedDeadline() {
     const { completed, deadline } = this.task;
 
+    const formatDeadline = format(deadline, "dd.MM.yyyy", { locale: ru });
+
     if (deadline) {
       if (!completed) {
         return isPast(deadline)
-          ? `просрочено ${formatDistanceToNow(deadline, { locale: ru })} назад`
-          : `осталось ${formatDistanceToNow(deadline, { locale: ru })}`;
+          ? `просрочено ${formatDistanceToNow(deadline, {
+              locale: ru,
+            })} назад (${formatDeadline})`
+          : `осталось ${formatDistanceToNow(deadline, {
+              locale: ru,
+            })} (${formatDeadline})`;
       }
     }
 

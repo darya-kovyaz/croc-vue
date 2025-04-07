@@ -4,7 +4,7 @@ import { IState, ITask } from "./state";
 const mutations: MutationTree<IState> = {
   setTasks(state, tasks: ITask[]) {
     state.tasks = tasks;
-    state.filteredTasks = tasks; // Заполняем и отфильтрованные задачи
+    state.filteredTasks = [...tasks];
   },
 
   clearTasks(state) {

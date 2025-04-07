@@ -111,6 +111,23 @@ html, body {
     background: white;
     padding: 5px 17px 15px 17px;
 
+    &.completed {
+      background-color: #D6DADE;
+      opacity: 0.8;
+
+      .task__title {
+        text-decoration: line-through;
+      }
+
+      .task__subTitle {
+        color: rgba(0, 0, 0, 0.6);
+      }
+
+      .task__item__body--deadline--deadlineAndCategory {
+        color: rgba(0, 0, 0, 0.6);
+      }
+    }
+
     &__header {
       display: flex;
       justify-content: space-between;

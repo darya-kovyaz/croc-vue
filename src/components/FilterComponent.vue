@@ -1,7 +1,7 @@
 <template>
   <div class="filter-component">
     <div>
-      <v-icon @click="openFilter">fa-solid fa-filter</v-icon>
+      <v-icon @click="openFilter" v-text="'fa-solid fa-filter'" />
     </div>
     <div v-if="isOpen" class="filter-component__content">
       <div class="filter-component__block">
