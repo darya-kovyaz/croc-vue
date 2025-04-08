@@ -4,23 +4,46 @@
     @mouseleave="hoverIdx = null"
     class="task__list__item-component"
   >
-    <div class="task__list__item-component__icons">
-      <div>
-        <v-icon
-          v-show="hoverIdx === idx"
-          size="medium"
-          v-text="'fa-solid fa-pen'"
-          @click="onEdit"
-        />
-      </div>
-      <div>
-        <v-icon
-          v-show="hoverIdx === idx"
-          size="medium"
-          v-text="'fa-solid fa-trash'"
-          @click="onDelete"
-        />
-      </div>
+    <div v-if="!task.completed" class="task__list__item-component__icons">
+      <v-tooltip bottom>
+        <template #activator="{ on }">
+          <v-icon
+            v-show="hoverIdx === idx"
+            v-on="on"
+            size="medium"
+            v-text="'fa-solid fa-pen'"
+            @click="onEdit"
+          />
+        </template>
+        <span>Изменить</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
+        <template #activator="{ on }">
+          <v-icon
+            v-show="hoverIdx === idx"
+            v-on="on"
+            size="medium"
+            v-text="'fa-solid fa-trash'"
+            @click="onDelete"
+          />
+        </template>
+        <span>Удалить</span>
+      </v-tooltip>
+    </div>
+    <div v-else class="task__list__item-component__icon-restore">
+      <v-tooltip bottom>
+        <template #activator="{ on }">
+          <v-icon
+            v-show="hoverIdx === idx"
+            v-on="on"
+            size="medium"
+            v-text="'fa-solid fa-trash-arrow-up'"
+            @click="onRestore"
+          />
+        </template>
+        <span>Восстановить</span>
+      </v-tooltip>
     </div>
 
     <div class="task__item" :class="{ completed: task.completed }">
@@ -128,6 +151,10 @@ export default class Tasks extends Vue {
 
   onDelete() {
     this.$emit("delete", this.task);
+  }
+
+  onRestore() {
+    this.$emit("restore", this.task);
   }
 
   getIcon(category: string) {

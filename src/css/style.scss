@@ -60,13 +60,14 @@ html, body {
     margin-top: 20px;
 
     &__component {
-      max-height: calc(100vh - 237px);
+      max-height: calc(100vh - 300px);
       overflow-y: auto;
       display: flex;
       align-items: center;
       justify-content: flex-start;
       flex-direction: column;
       padding: 0 20px 20px 20px;
+      margin-bottom: 15px;
     }
 
     &__item-component {
@@ -81,6 +82,11 @@ html, body {
         position: absolute;
         gap: 10px;
         left: -20px;
+      }
+
+      &__icon-restore {
+        position: absolute;
+        left: 0;
       }
     }
 

@@ -26,12 +26,18 @@ const mutations: MutationTree<IState> = {
   },
 
   updateTask(state, task: ITask) {
-    const index = state.tasks.findIndex((t) => t.id === task.id);
-    if (index !== -1) {
-      state.tasks.splice(index, 1, task);
-      state.filteredTasks.splice(index, 1, task);
-      localStorage.setItem("tasks", JSON.stringify(state.tasks));
+    const indexTasks = state.tasks.findIndex((t) => t.id === task.id);
+    if (indexTasks !== -1) {
+      state.tasks.splice(indexTasks, 1, task);
     }
+
+    const indexFiltered = state.filteredTasks.findIndex(
+      (t) => t.id === task.id
+    );
+    if (indexFiltered !== -1) {
+      state.filteredTasks.splice(indexFiltered, 1, task);
+    }
+    localStorage.setItem("tasks", JSON.stringify(state.tasks));
   },
 
   setFilterStatus(state, statusFilter: boolean[]) {

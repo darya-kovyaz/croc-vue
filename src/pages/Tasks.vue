@@ -25,15 +25,21 @@
 
       <div v-else class="task__list__component">
         <template v-for="(task, idx) in filteredTasks">
-          <Task
-            :task="task"
-            :key="task.id"
-            :idx="idx"
-            @edit="onOpenEditModal"
-            @delete="onDelete"
-          />
+          <v-lazy :key="task.id" transition="fade-transition">
+            <Task
+              :task="task"
+              :idx="idx"
+              @edit="onOpenEditModal"
+              @restore="onRestore"
+              @delete="onDelete"
+            />
+          </v-lazy>
         </template>
       </div>
+
+      <v-btn text v-if="pageSize < tasks.length" @click="onLoadMoreTasks">
+        Показать ещё
+      </v-btn>
       <ModalForm
         v-if="isOpen"
         :is-edit="isEdit"
@@ -71,9 +77,6 @@ export default class Tasks extends Vue {
   @State("filteredTasks")
   tasks!: ITask[];
 
-  @State("tasks")
-  rrr!: ITask[];
-
   @Mutation("setTasks")
   setTasks!: (tasks: ITask[]) => void;
 
@@ -98,9 +101,14 @@ export default class Tasks extends Vue {
   selectedTask: ITask | null = null;
 
   isLoading = false;
+  pageSize = 10;
 
   get filteredTasks() {
-    return this.tasks.sort((a, b) => Number(a.completed) - Number(b.completed));
+    const sortedTasks = this.tasks.sort(
+      (a, b) => Number(a.completed) - Number(b.completed)
+    );
+
+    return sortedTasks.slice(0, this.pageSize);
   }
 
   mounted() {
@@ -123,6 +131,11 @@ export default class Tasks extends Vue {
     this.setTasks(sortedTasks);
   }
 
+  onRestore(restoredTask: ITask) {
+    restoredTask.completed = false;
+    this.updateTask(restoredTask);
+  }
+
   onDelete(task: ITask) {
     this.deleteTask(task);
   }
@@ -137,6 +150,12 @@ export default class Tasks extends Vue {
     this.isEdit = true;
 
     this.selectedTask = task;
+  }
+
+  onLoadMoreTasks() {
+    if (this.pageSize < this.tasks.length) {
+      this.pageSize += 10;
+    }
   }
 
   onCloseModal() {
