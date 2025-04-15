@@ -24,22 +24,24 @@
       </div>
 
       <div v-else class="task__list__component">
-        <template v-for="(task, idx) in filteredTasks">
-          <v-lazy :key="task.id" transition="fade-transition">
-            <Task
-              :task="task"
-              :idx="idx"
-              @edit="onOpenEditModal"
-              @restore="onRestore"
-              @delete="onDelete"
-            />
-          </v-lazy>
-        </template>
+        <div v-for="(task, idx) in filteredTasks" :key="task.id">
+          <Task
+            :task="task"
+            :idx="idx"
+            @edit="onOpenEditModal"
+            @restore="onRestore"
+            @delete="onDelete"
+          />
+        </div>
       </div>
 
-      <v-btn text v-if="pageSize < tasks.length" @click="onLoadMoreTasks">
-        Показать ещё
-      </v-btn>
+      <Paging
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total-pages="totalPages"
+        @change-page="onChangePage"
+        @change-page-size="onChangePageSize"
+      />
       <ModalForm
         v-if="isOpen"
         :is-edit="isEdit"
@@ -64,6 +66,7 @@ import Task from "./Task.vue";
 import ModalForm from "./ModalForm.vue";
 import Sort from "../components/Sort.vue";
 import FilterComponent from "../components/FilterComponent.vue";
+import Paging from "../components/Paging.vue";
 
 @Component({
   components: {
@@ -71,6 +74,7 @@ import FilterComponent from "../components/FilterComponent.vue";
     Sort,
     ModalForm,
     FilterComponent,
+    Paging,
   },
 })
 export default class Tasks extends Vue {
@@ -101,14 +105,20 @@ export default class Tasks extends Vue {
   selectedTask: ITask | null = null;
 
   isLoading = false;
-  pageSize = 10;
+  pageSize = 25;
+  currentPage = 1;
 
   get filteredTasks() {
-    const sortedTasks = this.tasks.sort(
+    const paged = (this.currentPage - 1) * this.pageSize;
+    const sorted = this.tasks.sort(
       (a, b) => Number(a.completed) - Number(b.completed)
     );
 
-    return sortedTasks.slice(0, this.pageSize);
+    return sorted.slice(paged, paged + this.pageSize);
+  }
+
+  get totalPages() {
+    return Math.ceil(this.tasks.length / this.pageSize);
   }
 
   mounted() {
@@ -152,10 +162,12 @@ export default class Tasks extends Vue {
     this.selectedTask = task;
   }
 
-  onLoadMoreTasks() {
-    if (this.pageSize < this.tasks.length) {
-      this.pageSize += 10;
-    }
+  onChangePage(newPage: number) {
+    this.currentPage = newPage;
+  }
+
+  onChangePageSize(newPageSize: number) {
+    this.pageSize = newPageSize;
   }
 
   onCloseModal() {

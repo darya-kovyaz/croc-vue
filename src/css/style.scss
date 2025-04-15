@@ -60,7 +60,7 @@ html, body {
     margin-top: 20px;
 
     &__component {
-      max-height: calc(100vh - 300px);
+      height: calc(100vh - 300px);
       overflow-y: auto;
       display: flex;
       align-items: center;
@@ -240,5 +240,14 @@ html, body {
   &__apply-button {
     display: flex;
     justify-content: flex-end;
+  }
+}
+
+.paging {
+  display: flex;
+  justify-content: center;
+
+  &__select {
+    max-width: 150px;
   }
 }
